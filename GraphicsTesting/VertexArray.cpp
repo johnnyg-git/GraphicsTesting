@@ -1,6 +1,4 @@
 #include "VertexArray.h"
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 
 VertexArray::VertexArray()
 {
@@ -12,10 +10,10 @@ VertexArray::~VertexArray()
 	Delete();
 }
 
-void VertexArray::LinkVertexBuffer(VertexBuffer& vertexBuffer, unsigned int layout)
+void VertexArray::LinkAttrib(VertexBuffer& vertexBuffer, unsigned int layout, unsigned int numComponents, GLenum type, GLsizeiptr stride, void* offset)
 {
 	vertexBuffer.Bind();
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glVertexAttribPointer(layout, numComponents, type, GL_FALSE, stride, offset);
 	glEnableVertexAttribArray(layout);
 	vertexBuffer.Unbind();
 }

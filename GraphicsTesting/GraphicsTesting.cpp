@@ -1,5 +1,6 @@
-﻿// GraphicsTesting.cpp : Defines the entry point for the application.
-//
+﻿#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "GraphicsTesting.h"
 #include "Window.h"
@@ -19,26 +20,20 @@ int main()
 
     // Define the vertices of the triangle
     float vertices[] = {
-        -0.5f, -0.5f, 0.0f,
-         0.5f, -0.5f, 0.0f,
-         0.0f,  0.5f, 0.0f
+        -0.5f, -0.5f, 0.0f, 1,0,0,
+         0.5f, -0.5f, 0.0f, 0,1,0,
+         0.0f,  0.5f, 0.0f, 0,0,1
     };
-
-    // Create a Vertex Array Object (VAO) and a Vertex Buffer Object (VBO)
-    /*GLuint VAO;
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);*/
 
     VertexArray VAO;
     VAO.Bind();
 
     VertexBuffer VBO(vertices, sizeof(vertices));
 
-    // Configure vertex attributes
-    /*glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-    glEnableVertexAttribArray(0); */
+    VAO.LinkAttrib(VBO, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
+    VAO.LinkAttrib(VBO, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3*sizeof(float)));
 
-    VAO.LinkVertexBuffer(VBO, 0);
+    float rotation = 0;
 
     while (!glfwWindowShouldClose(window))
     {
@@ -46,6 +41,25 @@ int main()
 
         // Use the shader program
         defaultShader.Activate();
+
+        float aspectRatio = gameWindow->getWidth() / gameWindow->getHeight();
+
+        glm::mat4 model = glm::mat4(1.0f);
+        glm::mat4 view = glm::mat4(1.0f);
+        glm::mat4 proj = glm::mat4(1.0f);
+
+        rotation += gameWindow->deltaTime * 30;
+        model = glm::rotate(model, glm::radians(rotation), glm::vec3(0,1,0));
+        view = glm::translate(view, glm::vec3(0.0f, -0.5f, -2.0f));
+        proj = glm::perspective(glm::radians(90.0f), aspectRatio, 0.1f, 100.0f);
+
+        int modelLoc = glGetUniformLocation(defaultShader.GetRendererID(), "model");
+        int viewLoc = glGetUniformLocation(defaultShader.GetRendererID(), "view");
+        int projLoc = glGetUniformLocation(defaultShader.GetRendererID(), "proj");
+
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
 
         // Bind the VAO
         //glBindVertexArray(VAO);
