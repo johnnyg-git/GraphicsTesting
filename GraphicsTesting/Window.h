@@ -12,12 +12,12 @@ public:
 	glm::vec4 backgroundColor;
 	float deltaTime;
 private:
-	const char* title;
-	float width;
-	float height;
-	float lastTime;
+	const char* m_title;
+	float m_width;
+	float m_height;
+	float m_lastTime;
 
-	GLFWwindow* window;
+	GLFWwindow* m_window;
 
 public:
 	Window(const char* title, int width, int height);
@@ -27,9 +27,9 @@ public:
 	void clearScreen();
 	void updateScreen();
 
-	inline float getWidth() { return width; }
-	inline float getHeight() { return height; }
-	inline GLFWwindow* getWindow() { return window; }
+	inline float getWidth() const { return m_width; }
+	inline float getHeight() const { return m_height; }
+	inline GLFWwindow* getWindow() const { return m_window; }
 
 private:
 	bool init();
