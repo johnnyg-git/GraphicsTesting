@@ -3,7 +3,7 @@
 #
 
 # Add source to this project's executable.
-add_executable (GraphicsTesting "GraphicsTesting.cpp" "GraphicsTesting.h" "Window.h" "Window.cpp" "VertexBuffer.h" "VertexBuffer.cpp"  "IndexBuffer.cpp" "IndexBuffer.h" "Shader.h" "Shader.cpp" "VertexArray.h" "VertexArray.cpp")
+add_executable (GraphicsTesting "GraphicsTesting.cpp" "GraphicsTesting.h" "Window.h" "Window.cpp" "VertexBuffer.h" "VertexBuffer.cpp"  "ElementBuffer.cpp" "ElementBuffer.h" "Shader.h" "Shader.cpp" "VertexArray.h" "VertexArray.cpp" "Camera.h" "Camera.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET GraphicsTesting PROPERTY CXX_STANDARD 20)

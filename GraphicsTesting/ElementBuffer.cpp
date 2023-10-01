@@ -1,26 +1,25 @@
-#include "IndexBuffer.h"
+#include "ElementBuffer.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-IndexBuffer::IndexBuffer(const unsigned int* data, unsigned int size)
+ElementBuffer::ElementBuffer(const unsigned int* data, unsigned int size)
 {
 	glGenBuffers(1, &m_RendererID);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-IndexBuffer::~IndexBuffer()
+ElementBuffer::~ElementBuffer()
 {
 	glDeleteBuffers(1, &m_RendererID);
 }
 
-void IndexBuffer::Bind() const
+void ElementBuffer::Bind() const
 {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
 }
 
-void IndexBuffer::Unbind() const
+void ElementBuffer::Unbind() const
 {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
