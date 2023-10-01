@@ -5,26 +5,26 @@
 
 class Camera {
 public:
-	glm::vec3 position;
-	glm::quat rotation;
+	static glm::vec3 position;
+	static glm::quat rotation;
 
-	float fieldOfView;
-	float aspectRatio;
-	float nearPlane;
-	float farPlane;
+	static float fieldOfView;
+	static float aspectRatio;
+	static float nearPlane;
+	static float farPlane;
 
 private:
-	glm::mat4 viewMatrix;
-	glm::mat4 projectionMatrix;
-	glm::mat4 viewProjectionMatrix;
+	static glm::mat4 viewMatrix;
+	static glm::mat4 projectionMatrix;
+	static glm::mat4 viewProjectionMatrix;
 
 public:
-	Camera(glm::vec3 pos, glm::quat rot, float fov, float ar, float np, float fp);
+	static void Init(glm::vec3 pos, glm::quat rot, float fov, float ar, float np, float fp);
 
-	void UpdateViewMatrix();
-	void UpdateProjectionMatrix();
+	static void UpdateViewMatrix();
+	static void UpdateProjectionMatrix();
 
-	inline glm::mat4 GetViewMatrix() const { return viewMatrix; }
-	inline glm::mat4 GetProjectionMatrix() const {return projectionMatrix; }
-	inline glm::mat4 GetViewProjectionMatrix() const { return viewProjectionMatrix; }
+	static inline glm::mat4 GetViewMatrix() { return viewMatrix; }
+	static inline glm::mat4 GetProjectionMatrix() { return projectionMatrix; }
+	static inline glm::mat4 GetViewProjectionMatrix() { return viewProjectionMatrix; }
 };

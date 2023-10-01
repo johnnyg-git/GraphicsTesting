@@ -1,8 +1,8 @@
 ﻿#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <iostream>
 
-#include "GraphicsTesting.h"
 #include "Window.h"
 #include "VertexBuffer.h"
 #include "VertexArray.h"
@@ -58,13 +58,12 @@ int main()
 
     glm::quat rotation2 = glm::quatLookAt(glm::normalize(-glm::vec3(0.0f, -0.5f, -2.0f)), glm::vec3(0, 1, 0));
     float aspectRatio = gameWindow->getWidth() / gameWindow->getHeight();
-    Camera cam(glm::vec3(0.0f, -0.5f, -2.0f), rotation2, 90, aspectRatio, 0.1f, 100.0f);
+    Camera::Init(glm::vec3(0.0f, -0.5f, -2.0f), rotation2, 90, aspectRatio, 0.1f, 100.0f);
 
     while (!glfwWindowShouldClose(window))
     {
         gameWindow->clearScreen();
 
-        // Use the shader program
         defaultShader.Activate();
 
         aspectRatio = gameWindow->getWidth() / gameWindow->getHeight();
@@ -74,9 +73,9 @@ int main()
         rotation += gameWindow->deltaTime * 30;
         model = glm::rotate(model, glm::radians(rotation), glm::vec3(0,1,0));
 
-        cam.UpdateViewMatrix();
-        cam.UpdateProjectionMatrix();
-        glm::mat4 viewProj = cam.GetViewProjectionMatrix();
+        Camera::UpdateViewMatrix();
+        Camera::UpdateProjectionMatrix();
+        glm::mat4 viewProj = Camera::GetViewProjectionMatrix();
 
         int modelLoc = glGetUniformLocation(defaultShader.GetRendererID(), "model");
         int viewLoc = glGetUniformLocation(defaultShader.GetRendererID(), "viewProj");
@@ -84,12 +83,9 @@ int main()
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(viewProj));
 
-        // Bind the VAO
-        //glBindVertexArray(VAO);
 
         VAO.Bind();
 
-        // Draw the triangle
         glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(unsigned int), GL_UNSIGNED_INT, 0);
 
         gameWindow->updateScreen();
