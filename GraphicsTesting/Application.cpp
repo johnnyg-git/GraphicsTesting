@@ -12,10 +12,74 @@
 
 using namespace std;
 
+bool goforwards;
+bool gobackwards;
+bool goright;
+bool goleft;
+bool goFast;
+
+static double lastX = 0.0;
+static double lastY = 0.0;
+const double sensitivity = 0.05;
+
+void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    if (key == GLFW_KEY_W && action == GLFW_PRESS)
+        goforwards = true;
+    else if (key == GLFW_KEY_W && action == GLFW_RELEASE)
+        goforwards = false;
+
+    if (key == GLFW_KEY_S && action == GLFW_PRESS)
+        gobackwards = true;
+    else if (key == GLFW_KEY_S && action == GLFW_RELEASE)
+        gobackwards = false;
+
+    if (key == GLFW_KEY_D && action == GLFW_PRESS)
+        goright = true;
+    else if (key == GLFW_KEY_D && action == GLFW_RELEASE)
+        goright = false;
+
+    if (key == GLFW_KEY_A && action == GLFW_PRESS)
+        goleft = true;
+    else if (key == GLFW_KEY_A && action == GLFW_RELEASE)
+        goleft = false;
+
+    if (key == GLFW_KEY_LEFT_SHIFT && action == GLFW_PRESS)
+        goFast = true;
+    else if (key == GLFW_KEY_LEFT_SHIFT && action == GLFW_RELEASE)
+        goFast = false;
+}
+
+static void CursorPosCallback(GLFWwindow* window, double xpos, double ypos) {
+
+    // Calculate the mouse movement since the last frame
+    double xoffset = xpos - lastX;
+    double yoffset = lastY - ypos; // Reversed since y-coordinates go from bottom to top
+
+    // Update the last mouse position for the next frame
+    lastX = xpos;
+    lastY = ypos;
+
+    // Adjust camera's yaw and pitch based on mouse movement
+    Camera::yaw += xoffset * sensitivity;
+    Camera::pitch += yoffset * sensitivity;
+
+    // Constrain pitch to avoid camera flipping
+    if (Camera::pitch > 89.0) {
+        Camera::pitch = 89.0;
+    }
+    if (Camera::yaw < -89.0) {
+        Camera::yaw = -89.0;
+    }
+}
+
 int main()
 {
     Window* gameWindow = new Window("Title", 500, 500);
     GLFWwindow* window = gameWindow->getWindow();
+
+    glfwSetKeyCallback(window, KeyCallback);
+    glfwSetCursorPosCallback(window, CursorPosCallback);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     Shader defaultShader("res/default.vert", "res/default.frag");
 
@@ -75,13 +139,16 @@ int main()
 
         Camera::UpdateViewMatrix();
         Camera::UpdateProjectionMatrix();
-        glm::mat4 viewProj = Camera::GetViewProjectionMatrix();
+        glm::mat4 view = Camera::GetViewMatrix();
+        glm::mat4 proj = Camera::GetProjectionMatrix();
 
         int modelLoc = glGetUniformLocation(defaultShader.GetRendererID(), "model");
-        int viewLoc = glGetUniformLocation(defaultShader.GetRendererID(), "viewProj");
+        int viewLoc = glGetUniformLocation(defaultShader.GetRendererID(), "view");
+        int projLoc = glGetUniformLocation(defaultShader.GetRendererID(), "proj");
 
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(viewProj));
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
 
 
         VAO.Bind();
@@ -89,6 +156,22 @@ int main()
         glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(unsigned int), GL_UNSIGNED_INT, 0);
 
         gameWindow->updateScreen();
+
+        int mulitplier = goFast ? 2 : 1;
+
+        if (goforwards) {
+            Camera::position += glm::vec3(0, 0, 1 * gameWindow->deltaTime * mulitplier);
+        }
+        if (gobackwards) {
+            Camera::position += glm::vec3(0, 0, -1 * gameWindow->deltaTime * mulitplier);
+        }
+
+        if (goright) {
+            Camera::position += glm::vec3(-1 * gameWindow->deltaTime * mulitplier, 0, 0);
+        }
+        if (goleft) {
+            Camera::position += glm::vec3(1 * gameWindow->deltaTime * mulitplier, 0, 0);
+        }
     }
 
     glfwTerminate();

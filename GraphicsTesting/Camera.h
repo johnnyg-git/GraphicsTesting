@@ -6,7 +6,8 @@
 class Camera {
 public:
 	static glm::vec3 position;
-	static glm::quat rotation;
+	static float yaw;
+	static float pitch;
 
 	static float fieldOfView;
 	static float aspectRatio;
