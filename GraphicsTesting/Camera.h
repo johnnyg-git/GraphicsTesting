@@ -2,6 +2,7 @@
 #include<glm/glm.hpp>
 #include<glm/gtc/quaternion.hpp>
 #include<glm/common.hpp>
+#include "Shader.h"
 
 class Camera {
 public:
@@ -24,6 +25,8 @@ public:
 
 	static void UpdateViewMatrix();
 	static void UpdateProjectionMatrix();
+	static void UpdateViewProjectionMatrix();
+	static void UpdateShader(Shader* shader, const char* uniform);
 
 	static inline glm::mat4 GetViewMatrix() { return viewMatrix; }
 	static inline glm::mat4 GetProjectionMatrix() { return projectionMatrix; }

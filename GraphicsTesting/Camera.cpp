@@ -1,5 +1,8 @@
 #include "Camera.h"
 
+#include "glad/glad.h"
+#include "glm/gtc/type_ptr.hpp"
+
 glm::vec3 Camera::position;
 float Camera::yaw;
 float Camera::pitch;
@@ -46,4 +49,14 @@ void Camera::UpdateViewMatrix()
 void Camera::UpdateProjectionMatrix()
 {
 	projectionMatrix = glm::perspective(glm::radians(fieldOfView), aspectRatio, nearPlane, farPlane);
+}
+
+void Camera::UpdateViewProjectionMatrix()
+{
+	viewProjectionMatrix = projectionMatrix * viewMatrix;
+}
+
+void Camera::UpdateShader(Shader* shader, const char* uniform)
+{
+	glUniformMatrix4fv(glGetUniformLocation(shader->GetRendererID(), uniform), 1, GL_FALSE, glm::value_ptr(viewProjectionMatrix));
 }
