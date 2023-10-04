@@ -73,45 +73,15 @@ static void CursorPosCallback(GLFWwindow* window, double xpos, double ypos) {
 }
 
 // Vertices coordinates
-float vertices[] =
-{
-    -0.1f, -0.1f,  0.1f, 1.0f, 0.0f, 0.0f,
-    -0.1f, -0.1f, -0.1f, 1.0f, 0.0f, 0.0f,
-     0.1f, -0.1f, -0.1f, 1.0f, 0.0f, 0.0f,
-     0.1f, -0.1f,  0.1f, 1.0f, 0.0f, 0.0f,
-    -0.1f,  0.1f,  0.1f, 0.0f, 1.0f, 0.0f,
-    -0.1f,  0.1f, -0.1f, 0.0f, 1.0f, 0.0f,
-     0.1f,  0.1f, -0.1f, 0.0f, 1.0f, 0.0f,
-     0.1f,  0.1f,  0.1f ,0.0f, 1.0f, 0.0f
-};
-
-// Indices for vertices order
-unsigned int indices[] =
-{
-    0, 1, 2,
-    0, 2, 3,
-    0, 4, 7,
-    0, 7, 3,
-    3, 7, 6,
-    3, 6, 2,
-    2, 6, 5,
-    2, 5, 1,
-    1, 5, 4,
-    1, 4, 0,
-    4, 5, 6,
-    4, 6, 7
-};
-
-// Vertices coordinates
 float lightVertices[] =
 {
-    -0.1f, -0.1f,  0.1f,
-    -0.1f, -0.1f, -0.1f,
+    -0.1f, -0.1f,  0.1f, 
+    -0.1f, -0.1f, -0.1f, 
      0.1f, -0.1f, -0.1f,
-     0.1f, -0.1f,  0.1f,
+     0.1f, -0.1f,  0.1f, 
     -0.1f,  0.1f,  0.1f,
     -0.1f,  0.1f, -0.1f,
-     0.1f,  0.1f, -0.1f,
+     0.1f,  0.1f, -0.1f, 
      0.1f,  0.1f,  0.1f
 };
 
@@ -130,6 +100,42 @@ unsigned int lightIndices[] =
     1, 4, 0,
     4, 5, 6,
     4, 6, 7
+};
+
+// Vertices coordinates
+float vertices[] =
+{ //     COORDINATES     /        COLORS          /  NORMALS       //
+    -0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, -1.0f, 0.0f, // Bottom side
+    -0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, -1.0f, 0.0f, // Bottom side
+     0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, -1.0f, 0.0f, // Bottom side
+     0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, -1.0f, 0.0f, // Bottom side
+
+    -0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 -0.8f, 0.5f,  0.0f, // Left Side
+    -0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 -0.8f, 0.5f,  0.0f, // Left Side
+     0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 -0.8f, 0.5f,  0.0f, // Left Side
+
+    -0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 0.5f, -0.8f, // Non-facing side
+     0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 0.5f, -0.8f, // Non-facing side
+     0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 0.0f, 0.5f, -0.8f, // Non-facing side
+
+     0.5f, 0.0f, -0.5f,     0.83f, 0.70f, 0.44f,	 0.8f, 0.5f,  0.0f, // Right side
+     0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 0.8f, 0.5f,  0.0f, // Right side
+     0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 0.8f, 0.5f,  0.0f, // Right side
+
+     0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f,	 0.0f, 0.5f,  0.8f, // Facing side
+    -0.5f, 0.0f,  0.5f,     0.83f, 0.70f, 0.44f, 	 0.0f, 0.5f,  0.8f, // Facing side
+     0.0f, 0.8f,  0.0f,     0.92f, 0.86f, 0.76f,	 0.0f, 0.5f,  0.8f  // Facing side
+};
+
+// Indices for vertices order
+unsigned int indices[] =
+{
+    0, 1, 2, // Bottom side
+    0, 2, 3, // Bottom side
+    4, 6, 5, // Left side
+    7, 9, 8, // Non-facing side
+    10, 12, 11, // Right side
+    13, 15, 14 // Facing side
 };
 
 int main()
@@ -152,8 +158,9 @@ int main()
     VertexBuffer VBO(vertices, sizeof(vertices));
     ElementBuffer EBO(indices, sizeof(indices));
 
-    VAO.LinkAttrib(VBO, 0, 3, GL_FLOAT, 6 * sizeof(float), 0);
-    VAO.LinkAttrib(VBO, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3*sizeof(float)));
+    VAO.LinkAttrib(VBO, 0, 3, GL_FLOAT, 9 * sizeof(float), 0);
+    VAO.LinkAttrib(VBO, 1, 3, GL_FLOAT, 9 * sizeof(float), (void*)(3 * sizeof(float)));
+    VAO.LinkAttrib(VBO, 2, 3, GL_FLOAT, 9 * sizeof(float), (void*)(6 * sizeof(float)));
 
     float rotation = 0;
 
@@ -169,12 +176,12 @@ int main()
     lightVAO.LinkAttrib(lightVBO, 0, 3, GL_FLOAT, 3 * sizeof(float), 0);
     lightVAO.Unbind();
 
-    glm::quat rotation2 = glm::quatLookAt(glm::normalize(-glm::vec3(0.0f, 0.0f, -2.0f)), glm::vec3(0, 1, 0));
     float aspectRatio = gameWindow->getWidth() / gameWindow->getHeight();
-    Camera::Init(glm::vec3(0.0f, 0.0f, -2.0f), rotation2, 90, aspectRatio, 0.1f, 100.0f);
+    Camera::Init(glm::vec3(0.0f, .5f, -2.0f), 0,0, 90, aspectRatio, 0.1f, 100.0f);
 
     defaultShader.Activate();
     glUniform4f(glGetUniformLocation(defaultShader.GetRendererID(), "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+    glUniform3f(glGetUniformLocation(defaultShader.GetRendererID(), "lightPos"), 1.0f, 3.0f, 0.0f);
     lightShader.Activate();
     glUniform4f(glGetUniformLocation(lightShader.GetRendererID(), "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
 
@@ -217,20 +224,29 @@ int main()
 
         gameWindow->updateScreen();
 
+        glm::vec3 front;
+        front.x = cos(glm::radians(Camera::yaw) * cos(glm::radians(Camera::pitch)));
+        front.y = sin(glm::radians(Camera::pitch));
+        front.z = sin(glm::radians(Camera::yaw)) * cos(glm::radians(Camera::pitch));
+        front = glm::normalize(front);
+
+        glm::vec3 right = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), front));
+        glm::vec3 up = glm::cross(front, right);
+
         int mulitplier = goFast ? 2 : 1;
 
         if (goforwards) {
-            Camera::position += glm::vec3(0, 0, 1 * gameWindow->deltaTime * mulitplier);
+            Camera::position += gameWindow->deltaTime * mulitplier* front;
         }
         if (gobackwards) {
-            Camera::position += glm::vec3(0, 0, -1 * gameWindow->deltaTime * mulitplier);
+            Camera::position += gameWindow->deltaTime * mulitplier * -front;
         }
 
         if (goright) {
-            Camera::position += glm::vec3(-1 * gameWindow->deltaTime * mulitplier, 0, 0);
+            Camera::position += gameWindow->deltaTime * mulitplier * -right;
         }
         if (goleft) {
-            Camera::position += glm::vec3(1 * gameWindow->deltaTime * mulitplier, 0, 0);
+            Camera::position += gameWindow->deltaTime * mulitplier* right;
         }
     }
 

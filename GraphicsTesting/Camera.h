@@ -21,7 +21,7 @@ private:
 	static glm::mat4 viewProjectionMatrix;
 
 public:
-	static void Init(glm::vec3 pos, glm::quat rot, float fov, float ar, float np, float fp);
+	static void Init(glm::vec3 pos, float pitch, float yaw, float fov, float ar, float np, float fp);
 
 	static void UpdateViewMatrix();
 	static void UpdateProjectionMatrix();

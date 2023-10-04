@@ -15,13 +15,15 @@ glm::mat4 Camera::viewMatrix;
 glm::mat4 Camera::projectionMatrix;
 glm::mat4 Camera::viewProjectionMatrix;
 
-void Camera::Init(glm::vec3 pos, glm::quat rot, float fov, float ar, float np, float fp)
+void Camera::Init(glm::vec3 pos, float pit, float ya, float fov, float ar, float np, float fp)
 {
 	position = pos;
 	fieldOfView = fov;
 	aspectRatio = ar;
 	nearPlane = np;
 	farPlane = fp;
+	pitch = pit;
+	yaw = ya;
 
 	UpdateViewMatrix();
 	UpdateProjectionMatrix();
