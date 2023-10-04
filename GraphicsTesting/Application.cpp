@@ -182,6 +182,7 @@ int main()
     defaultShader.Activate();
     glUniform4f(glGetUniformLocation(defaultShader.GetRendererID(), "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
     glUniform3f(glGetUniformLocation(defaultShader.GetRendererID(), "lightPos"), 1.0f, 3.0f, 0.0f);
+    glUniform3f(glGetUniformLocation(defaultShader.GetRendererID(), "camPos"), Camera::position.x, Camera::position.y, Camera::position.z);
     lightShader.Activate();
     glUniform4f(glGetUniformLocation(lightShader.GetRendererID(), "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
 
