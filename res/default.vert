@@ -17,5 +17,5 @@ void main()
 
     gl_Position = viewProj * model * vec4(aPos, 1.0);
     color = aColor;
-    normal = vec3(model * vec4(aNormal, 1.0));
+    normal = mat3(transpose(inverse(model))) * aNormal;
 }

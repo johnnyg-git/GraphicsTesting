@@ -138,6 +138,23 @@ unsigned int indices[] =
     13, 15, 14 // Facing side
 };
 
+float planeVertices[] = 
+{
+    -1.0f, 0.0f, 1.0f,      1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+    -1.0f, 0.0f, 0.0f,      1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+     1.0f, 0.0f, 0.0f,      1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+
+    1.0f, 0.0f, 0.0f,      1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+    1.0f, 0.0f, 1.0f,      1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+   -1.0f, 0.0f, 1.0f,      1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+};
+
+unsigned int planeIndices[] = 
+{
+	0, 1, 2,
+    3, 4, 5
+};
+
 int main()
 {
     Window* gameWindow = new Window("Title", 500, 500);
@@ -166,6 +183,18 @@ int main()
 
     VAO.Unbind();
 
+    VertexArray planeVAO;
+    planeVAO.Bind();
+
+    VertexBuffer planeVBO(planeVertices, sizeof(planeVertices));
+    ElementBuffer planeEBO(planeIndices, sizeof(planeIndices));
+
+    planeVAO.LinkAttrib(planeVBO, 0, 3, GL_FLOAT, 9 * sizeof(float), 0);
+    planeVAO.LinkAttrib(planeVBO, 1, 3, GL_FLOAT, 9 * sizeof(float), (void*)(3 * sizeof(float)));
+    planeVAO.LinkAttrib(planeVBO, 2, 3, GL_FLOAT, 9 * sizeof(float), (void*)(6 * sizeof(float)));
+
+    planeVAO.Unbind();
+
     Shader lightShader("res/light.vert", "res/light.frag");
     VertexArray lightVAO;
     lightVAO.Bind();
@@ -182,7 +211,6 @@ int main()
     defaultShader.Activate();
     glUniform4f(glGetUniformLocation(defaultShader.GetRendererID(), "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
     glUniform3f(glGetUniformLocation(defaultShader.GetRendererID(), "lightPos"), 1.0f, 3.0f, 0.0f);
-    glUniform3f(glGetUniformLocation(defaultShader.GetRendererID(), "camPos"), Camera::position.x, Camera::position.y, Camera::position.z);
     lightShader.Activate();
     glUniform4f(glGetUniformLocation(lightShader.GetRendererID(), "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
 
@@ -208,10 +236,20 @@ int main()
 
         int modelLoc = glGetUniformLocation(defaultShader.GetRendererID(), "model");
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniform3f(glGetUniformLocation(defaultShader.GetRendererID(), "camPos"), Camera::position.x, Camera::position.y, Camera::position.z);
 
         VAO.Bind();
 
         glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(unsigned int), GL_UNSIGNED_INT, 0);
+
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(-5.0f, 0.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+        planeVAO.Bind();
+
+        glDrawElements(GL_TRIANGLES, sizeof(planeIndices) / sizeof(unsigned int), GL_UNSIGNED_INT, 0);
 
         lightShader.Activate();
 
