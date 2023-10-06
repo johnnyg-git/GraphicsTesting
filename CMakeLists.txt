@@ -19,7 +19,7 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
 # Include sub-projects.
 add_subdirectory("thirdparty/glad")
-add_subdirectory("thirdparty/glfw-3.3.8")
+add_subdirectory("thirdparty/glfw")
 add_subdirectory("thirdparty/glm")
 add_subdirectory("thirdparty/assimp")
 add_subdirectory ("GraphicsTesting")
