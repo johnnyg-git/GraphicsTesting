@@ -73,6 +73,19 @@ Shader::~Shader()
 	Delete();
 }
 
+unsigned int Shader::GetUniformLocation(const char* name)
+{
+	Activate();
+
+	if(uniformLocationCache.find(name) != uniformLocationCache.end())
+		return uniformLocationCache[name];
+
+	int location = glGetUniformLocation(m_RendererID, name);
+	uniformLocationCache[name] = location;
+
+	return 0;
+}
+
 void Shader::Activate()
 {
 	glUseProgram(m_RendererID);

@@ -206,7 +206,7 @@ int main()
     lightVAO.Unbind();
 
     float aspectRatio = gameWindow->getWidth() / gameWindow->getHeight();
-    Camera::Init(glm::vec3(0.0f, .5f, -2.0f), 0,0, 90, aspectRatio, 0.1f, 100.0f);
+    Camera::Init(gameWindow, glm::vec3(0.0f, .5f, -2.0f), 0,0, 90, aspectRatio, 0.1f, 100.0f);
 
     defaultShader.Activate();
     glUniform4f(glGetUniformLocation(defaultShader.GetRendererID(), "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);

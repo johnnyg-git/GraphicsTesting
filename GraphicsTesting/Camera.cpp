@@ -1,8 +1,9 @@
 #include "Camera.h"
 
-#include "glad/glad.h"
-#include "glm/gtc/type_ptr.hpp"
+#include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp>
 
+Window* Camera::window;
 glm::vec3 Camera::position;
 float Camera::yaw;
 float Camera::pitch;
@@ -15,8 +16,9 @@ glm::mat4 Camera::viewMatrix;
 glm::mat4 Camera::projectionMatrix;
 glm::mat4 Camera::viewProjectionMatrix;
 
-void Camera::Init(glm::vec3 pos, float pit, float ya, float fov, float ar, float np, float fp)
+void Camera::Init(Window* windowInstance, glm::vec3 pos, float pit, float ya, float fov, float ar, float np, float fp)
 {
+	window = windowInstance;
 	position = pos;
 	fieldOfView = fov;
 	aspectRatio = ar;
@@ -50,6 +52,7 @@ void Camera::UpdateViewMatrix()
 
 void Camera::UpdateProjectionMatrix()
 {
+	aspectRatio = window->getWidth() / window->getHeight();
 	projectionMatrix = glm::perspective(glm::radians(fieldOfView), aspectRatio, nearPlane, farPlane);
 }
 

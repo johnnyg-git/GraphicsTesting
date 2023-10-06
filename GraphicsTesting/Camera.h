@@ -3,9 +3,11 @@
 #include<glm/gtc/quaternion.hpp>
 #include<glm/common.hpp>
 #include "Shader.h"
+#include "Window.h"
 
 class Camera {
 public:
+	static Window* window;
 	static glm::vec3 position;
 	static float yaw;
 	static float pitch;
@@ -21,7 +23,7 @@ private:
 	static glm::mat4 viewProjectionMatrix;
 
 public:
-	static void Init(glm::vec3 pos, float pitch, float yaw, float fov, float ar, float np, float fp);
+	static void Init(Window* windowInstance, glm::vec3 pos, float pitch, float yaw, float fov, float ar, float np, float fp);
 
 	static void UpdateViewMatrix();
 	static void UpdateProjectionMatrix();
