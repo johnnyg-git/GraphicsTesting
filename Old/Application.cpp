@@ -155,7 +155,7 @@ unsigned int planeIndices[] =
     3, 4, 5
 };
 
-int main()
+int mainOld()
 {
     Window* gameWindow = new Window("Title", 500, 500);
     GLFWwindow* window = gameWindow->getWindow();
