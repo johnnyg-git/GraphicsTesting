@@ -11,16 +11,19 @@ int main()
 	GLFWwindow* window = gameWindow->GetWindow();
 
 	Shader defaultShader("res/default.vert", "res/default.frag");
-	Mesh mesh("res/monkey.obj");
+	Mesh mesh("res/teapot.obj");
 
-	glm::mat4 model = glm::mat4(1.0f);
-	glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 3.0f),
+	glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	glm::mat4 monkeyPos = glm::translate(glm::mat4(1.0f), glm::vec3(-3.0f, 0.0f, 0.0f));
+	glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 3.0f, 10.0f),
 										 glm::vec3(0.0f, 0.0f, 0.0f),
 										 glm::vec3(0.0f, 1.0f, 0.0f));
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f),
 															 500.0f / 500.0f,
 															 0.1f,
 															 100.0f);
+
+	Mesh monkey("res/monkey.obj");
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -42,6 +45,10 @@ int main()
 		defaultShader.SetBool("useTexture", false);
 
 		mesh.Render(defaultShader);
+
+		defaultShader.SetMatrix4fv("model", glm::value_ptr(monkeyPos));
+		defaultShader.SetVec3("objectColor", 0.0f, 0.0f, 1.0f);
+		monkey.Render(defaultShader);
 
 		gameWindow->UpdateWindow();
 	}
