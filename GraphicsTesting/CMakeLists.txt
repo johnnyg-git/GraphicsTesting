@@ -1,7 +1,7 @@
 ﻿# CMakeList.txt : CMake project for GraphicsTesting, include source and define
 
 # Add source to this project's executable.
-add_executable (GraphicsTesting "Main.cpp" "Renderer/Renderer.h" "Renderer/Window.h" "Renderer/Window.cpp"  )
+add_executable (GraphicsTesting "Main.cpp" "Renderer/Renderer.h" "Renderer/Window.h" "Renderer/Window.cpp"   "Renderer/Shader.h" "Renderer/Shader.cpp")
 
 target_link_libraries(GraphicsTesting glfw)
 target_link_libraries(GraphicsTesting glad)

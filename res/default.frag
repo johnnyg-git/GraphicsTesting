@@ -1,27 +1,31 @@
 #version 330 core
-out vec4 FragColor;
 
-in vec3 color;
-in vec3 normal;
-in vec3 crntPos;
+in vec3 fragNormal;                  // Interpolated normal from the vertex shader
+in vec2 fragTexCoords;               // Interpolated texture coordinates from the vertex shader
 
-uniform vec4 lightColor;
-uniform vec3 lightPos;
-uniform vec3 cameraPos;
+out vec4 fragColor;                  // Output color of the fragment
 
-void main()
-{
-    float ambientStrength = 0.05f;
-    vec3 Normal = normalize(normal);
-    vec3 lightDir = normalize(lightPos-crntPos);
+uniform vec3 lightColor;             // Color of the light source
+uniform vec3 objectColor;            // Color of the object
+uniform sampler2D texture1;          // Texture sampler
+uniform bool useTexture;             // Flag to enable/disable texturing
 
-    float diff = max(dot(normal, lightDir), 0.0f);
+void main() {
+    vec3 norm = normalize(fragNormal);
+    vec3 lightDirection = normalize(vec3(1.0, 1.0, 1.0));
 
-    float specStrength = 1.0f;
-    vec3 viewDir = normalize(cameraPos - crntPos);
-    vec3 reflectDir = reflect(-lightDir, Normal);
-    float specAmount = pow(max(dot(viewDir, reflectDir), 0.0f), 16);
-    float specular = specAmount*specStrength;
+    float ambientStrength = 0.3;
+    vec3 ambient = ambientStrength * lightColor;
 
-    FragColor = vec4(color, 1.0f) * lightColor * (diff +  specular + ambientStrength);
+    float diff = max(dot(norm, lightDirection), 0.0);
+    vec3 diffuse = diff * lightColor;
+
+    vec3 result = (ambient + diffuse) * objectColor;
+
+    if (useTexture) {
+        vec4 texColor = texture(texture1, fragTexCoords);
+        fragColor = vec4(result * texColor.rgb, texColor.a);
+    } else {
+        fragColor = vec4(result, 1.0);
+    }
 }
