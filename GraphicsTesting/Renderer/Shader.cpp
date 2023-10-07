@@ -43,7 +43,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 		glGetShaderInfoLog(vertex, 512, NULL, infoLog);
 		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" <<
 			infoLog << std::endl;
-	};
+	}
 
 	unsigned int fragment = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragment, 1, &fragmentSource, NULL);
@@ -55,7 +55,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 		glGetShaderInfoLog(fragment, 512, NULL, infoLog);
 		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" <<
 			infoLog << std::endl;
-	};
+	}
 
 	m_rendererID = glCreateProgram();
 	glAttachShader(m_rendererID, vertex);
@@ -113,6 +113,21 @@ void Shader::SetInt(const char* name, int value)
 void Shader::SetFloat(const char* name, float value)
 {
 	glUniform1f(GetUniformLocation(name), value);
+}
+
+void Shader::SetVec3(const char* name, float x, float y, float z)
+{
+	glUniform3f(GetUniformLocation(name), x, y, z);
+}
+
+void Shader::SetVec4(const char* name, float x, float y, float z, float w)
+{
+	glUniform4f(GetUniformLocation(name), x, y, z, w);
+}
+
+void Shader::SetMatrix4fv(const char* name, float* value)
+{
+	glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, value);
 }
 
 void Shader::Use() const

@@ -2,12 +2,12 @@
 
 VertexArray::VertexArray()
 {
-	glGenVertexArrays(1, &m_RendererID);
+	glGenVertexArrays(1, &m_rendererID);
 }
 
 VertexArray::~VertexArray()
 {
-	Delete();
+	glDeleteVertexArrays(0, &m_rendererID);
 }
 
 void VertexArray::LinkAttrib(VertexBuffer& vertexBuffer, unsigned int layout, unsigned int numComponents, GLenum type, GLsizeiptr stride, void* offset)
@@ -20,15 +20,10 @@ void VertexArray::LinkAttrib(VertexBuffer& vertexBuffer, unsigned int layout, un
 
 void VertexArray::Bind()
 {
-	glBindVertexArray(m_RendererID);
+	glBindVertexArray(m_rendererID);
 }
 
 void VertexArray::Unbind()
 {
 	glBindVertexArray(0);
-}
-
-void VertexArray::Delete()
-{
-	glDeleteVertexArrays(0, &m_RendererID);
 }
