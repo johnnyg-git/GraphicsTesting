@@ -18,6 +18,39 @@ void WindowResizeCallback(GLFWwindow* window, int width, int height)
 	wind->m_height = height;
 }
 
+void KeyCallback(GLFWwindow* window, int key, int scanCode, int action, int mods)
+{
+	Window* wind = (Window*)glfwGetWindowUserPointer(window);
+	if (action == GLFW_PRESS)
+	{
+		wind->m_keysPressed.insert(key);
+	}
+	else if (action == GLFW_RELEASE)
+	{
+		wind->m_keysPressed.erase(key);
+	}
+}
+
+void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+{
+	Window* wind = (Window*)glfwGetWindowUserPointer(window);
+	if (action == GLFW_PRESS)
+	{
+		wind->m_mouseButtonsPressed.insert(button);
+	}
+	else if (action == GLFW_RELEASE)
+	{
+		wind->m_mouseButtonsPressed.erase(button);
+	}
+}
+
+void CursorMoveCallback(GLFWwindow* window, double xPos, double yPos)
+{
+	Window* wind = (Window*)glfwGetWindowUserPointer(window);
+	wind->m_mouseX = xPos;
+	wind->m_mouseY = yPos;
+}
+
 // Window class methods
 
 // Window class constructors and destructor
@@ -59,25 +92,6 @@ Window::~Window()
 
 	// Terminate GLFW
 	glfwTerminate();
-}
-
-// Clears the window, clears color and depth buffer and fills with backgroundColor
-void Window::ClearWindow() const
-{
-	// Clear buffers
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-}
-
-// Updates the window, swaps buffers, polls events and updates delta time
-void Window::UpdateWindow()
-{
-	// Update delta time
-	const double currentTime = glfwGetTime();
-	m_deltaTime = currentTime - m_lastTime; m_lastTime = currentTime;
-
-	// Swap buffers and poll events
-	glfwSwapBuffers(m_window);
-	glfwPollEvents();
 }
 
 // Initializes the window
@@ -138,6 +152,42 @@ bool Window::Init()
 	double currentTime = glfwGetTime();
 	m_lastTime = currentTime;
 
+	glfwSetKeyCallback(m_window, KeyCallback);
+	glfwSetMouseButtonCallback(m_window, MouseButtonCallback);
+	glfwSetCursorPosCallback(m_window, CursorMoveCallback);
+
 	// Done, return true
 	return true;
+}
+
+// Clears the window, clears color and depth buffer and fills with backgroundColor
+void Window::ClearWindow() const
+{
+	// Clear buffers
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+}
+
+// Updates the window, swaps buffers, polls events and updates delta time
+void Window::UpdateWindow()
+{
+	// Update delta time
+	const double currentTime = glfwGetTime();
+	m_deltaTime = currentTime - m_lastTime; m_lastTime = currentTime;
+
+	// Swap buffers and poll events
+	glfwSwapBuffers(m_window);
+	glfwPollEvents();
+}
+
+bool Window::IsKeyPressed(int key, bool reset)
+{
+	if (m_keysPressed.contains(key))
+	{
+		if (reset)
+			m_keysPressed.erase(key);
+
+		return true;
+	}
+
+	return false;
 }

@@ -1,4 +1,5 @@
 #pragma once
+#include <unordered_set>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -6,6 +7,9 @@
 // Callbacks
 static void WindowErrorCallback(int error, const char* description);
 static void WindowResizeCallback(GLFWwindow* window, int width, int height);
+static void KeyCallback(GLFWwindow* window, int key, int scanCode, int action, int mods);
+static void MouseButtonCallback(GLFWwindow* window, int button, int scanCode, int action, int mods);
+static void CursorMoveCallback(GLFWwindow* window, double xPos, double yPos);
 
 // Window class
 // This class is used to create a window and handle the window's events
@@ -20,11 +24,17 @@ private:
 	double m_deltaTime;
 	// Width and height of the window, set at construction
 	float m_width, m_height;
+	// Mouse position
+	float m_mouseX, m_mouseY;
 	// Last time the window was updated
 	float m_lastTime;
 
 	// Pointer to the GLFWWindow instance
 	GLFWwindow* m_window;
+	// Set of keys that are currently pressed
+	std::unordered_set<int> m_keysPressed;
+	// Set of mouse buttons that are currently pressed
+	std::unordered_set<int> m_mouseButtonsPressed;
 
 public:
 	// Constructors and destructor
@@ -37,10 +47,18 @@ public:
 	// Updates the window, swaps buffers and polls events
 	void UpdateWindow();
 
+	// Checks if a key is pressed, if reset is true, the key will be removed from the pressed keys
+	bool IsKeyPressed(int key, bool reset = true);
+
+	// Checks if a mouse button is pressed, if reset is true, the button will be removed from the pressed buttons
+	bool IsMouseButtonPressed(int button, bool reset = true);
+
 	// Getters
 	inline double GetDeltaTime() const { return m_deltaTime; }
 	inline float GetWidth() const { return m_width; }
 	inline float GetHeight() const { return m_height; }
+	inline float GetMouseX() const { return m_mouseX; }
+	inline float GetMouseY() const { return m_mouseY; }
 	inline GLFWwindow* GetWindow() const { return m_window; }
 
 private:
@@ -50,4 +68,7 @@ private:
 	// Friends
 	friend void WindowErrorCallback(int error, const char* description);
 	friend void WindowResizeCallback(GLFWwindow* window, int width, int height);
+	friend void KeyCallback(GLFWwindow* window, int key, int scanCode, int action, int mods);
+	friend void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+	friend void CursorMoveCallback(GLFWwindow* window, double xPos, double yPos);
 };
