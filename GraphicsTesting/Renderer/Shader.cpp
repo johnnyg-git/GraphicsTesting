@@ -31,6 +31,8 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 	const char* vertexSource = vertexCode.c_str();
 	const char* fragmentSource = fragmentCode.c_str();
 
+	std::cout << vertexSource << std::endl;
+
 	unsigned int vertex = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertex, 1, &vertexSource, NULL);
 	glCompileShader(vertex);
@@ -43,6 +45,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 		glGetShaderInfoLog(vertex, 512, NULL, infoLog);
 		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" <<
 			infoLog << std::endl;
+		return;
 	}
 
 	unsigned int fragment = glCreateShader(GL_FRAGMENT_SHADER);
@@ -55,6 +58,8 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 		glGetShaderInfoLog(fragment, 512, NULL, infoLog);
 		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" <<
 			infoLog << std::endl;
+
+		return;
 	}
 
 	m_rendererID = glCreateProgram();
@@ -68,6 +73,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 		glGetProgramInfoLog(m_rendererID, 512, NULL, infoLog);
 		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" <<
 			infoLog << std::endl;
+		return;
 	}
 
 	glDeleteShader(vertex);
@@ -130,7 +136,7 @@ void Shader::SetMatrix4fv(const char* name, float* value)
 	glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, value);
 }
 
-void Shader::Use() const
+void Shader::Use()
 {
 	glUseProgram(m_rendererID);
 }

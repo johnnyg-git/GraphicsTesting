@@ -18,9 +18,8 @@ Mesh::~Mesh() {
 	delete m_ebo;
 }
 
-void Mesh::Render(Shader shader) {
-	shader.Use();
-
+void Mesh::Render(Shader* shader) {
+	shader->Use();
 	m_vao->Bind();
 	m_ebo->Bind();
 	glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0);

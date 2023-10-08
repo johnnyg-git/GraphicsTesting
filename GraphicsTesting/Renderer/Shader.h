@@ -16,7 +16,7 @@ public:
 	void SetVec4(const char* name, float x, float y, float z, float w);
 	void SetMatrix4fv(const char* name, float* value);
 
-	void Use() const;
+	void Use();
 
 private:
 	unsigned int m_rendererID;

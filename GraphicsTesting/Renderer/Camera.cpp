@@ -36,8 +36,13 @@ void Camera::UpdateProjectionMatrix() {
 	projectionMatrix = glm::perspective(glm::radians(m_fieldOfView), m_aspectRatio, m_nearPlane, m_farPlane);
 }
 
-void Camera::UpdateShader(Shader* shader, const char* viewUniform, const char* projectionUniform) {
+void Camera::UpdateShader(Shader* shader, const char* viewUniform, const char* projectionUniform, const char* viewLocationUniform) {
 	shader->Use();
 	shader->SetMatrix4fv(viewUniform, glm::value_ptr(viewMatrix));
 	shader->SetMatrix4fv(projectionUniform, glm::value_ptr(projectionMatrix));
+
+	if(viewLocationUniform != "")
+	{
+		shader->SetVec3(viewLocationUniform, m_transform.GetPosition().x, m_transform.GetPosition().y, m_transform.GetPosition().z);
+	}
 }

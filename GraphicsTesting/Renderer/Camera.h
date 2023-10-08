@@ -29,7 +29,7 @@ public:
 	void UpdateViewMatrix();
 	void UpdateProjectionMatrix();
 
-	void UpdateShader(Shader* shader, const char* viewUniform, const char* projectionUniform);
+	void UpdateShader(Shader* shader, const char* viewUniform, const char* projectionUniform, const char* viewLocationUniform = "");
 
 	inline glm::mat4 GetViewMatrix() { return viewMatrix; }
 	inline glm::mat4 GetProjectionMatrix() { return projectionMatrix; }

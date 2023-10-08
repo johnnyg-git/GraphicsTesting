@@ -31,7 +31,7 @@ public:
     Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
 	~Mesh();
 
-	void Render(Shader shader);
+	void Render(Shader* shader);
 
 private:
     void LoadMesh(const char* filePath);
