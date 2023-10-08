@@ -1,13 +1,14 @@
 #include "Renderer/Renderer.h"
 
 #include <iostream>
+#include <ranges>
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 int main()
 {
-	Window* gameWindow = new Window("Graphics Testing", 500, 500, glm::vec4(1,1,0.5f,1));
+	Window* gameWindow = new Window("Graphics Testing", 500, 500);
 	GLFWwindow* window = gameWindow->GetWindow();
 
 	Shader defaultShader("res/default.vert", "res/default.frag");
@@ -24,6 +25,8 @@ int main()
 															 100.0f);
 
 	Mesh monkey("res/monkey.obj");
+
+	Transform monkeyTransform(glm::vec3(-3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -46,7 +49,9 @@ int main()
 
 		mesh.Render(defaultShader);
 
-		defaultShader.SetMatrix4fv("model", glm::value_ptr(monkeyPos));
+		monkeyTransform.Rotate(glm::vec3(0.0f, 10.0f * gameWindow->GetDeltaTime(), 0.0f));
+		glm::mat4 matrix = monkeyTransform.GetLocalToWorldMatrix();
+		defaultShader.SetMatrix4fv("model", glm::value_ptr(matrix));
 		defaultShader.SetVec3("objectColor", 0.0f, 0.0f, 1.0f);
 		monkey.Render(defaultShader);
 

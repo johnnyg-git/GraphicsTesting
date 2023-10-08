@@ -156,6 +156,8 @@ bool Window::Init()
 	glfwSetMouseButtonCallback(m_window, MouseButtonCallback);
 	glfwSetCursorPosCallback(m_window, CursorMoveCallback);
 
+	m_deltaTime = 0.0f;
+
 	// Done, return true
 	return true;
 }
