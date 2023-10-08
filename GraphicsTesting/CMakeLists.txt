@@ -1,7 +1,7 @@
 ﻿# CMakeList.txt : CMake project for GraphicsTesting, include source and define
 
 # Add source to this project's executable.
-add_executable (GraphicsTesting "Main.cpp" "Renderer/Renderer.h" "Renderer/Window.h" "Renderer/Window.cpp"   "Renderer/Shader.h" "Renderer/Shader.cpp" "Renderer/Mesh.h" "Renderer/Mesh.cpp" "Renderer/VertexArray.h" "Renderer/VertexArray.cpp" "Renderer/VertexBuffer.h" "Renderer/VertexBuffer.cpp" "Renderer/ElementBuffer.h" "Renderer/ElementBuffer.cpp" "Renderer/Transform.h" "Renderer/Transform.cpp")
+add_executable (GraphicsTesting "Main.cpp" "Renderer/Renderer.h" "Renderer/Window.h" "Renderer/Window.cpp"   "Renderer/Shader.h" "Renderer/Shader.cpp" "Renderer/Mesh.h" "Renderer/Mesh.cpp" "Renderer/VertexArray.h" "Renderer/VertexArray.cpp" "Renderer/VertexBuffer.h" "Renderer/VertexBuffer.cpp" "Renderer/ElementBuffer.h" "Renderer/ElementBuffer.cpp" "Renderer/Transform.h" "Renderer/Transform.cpp" "Renderer/Camera.h" "Renderer/Camera.cpp")
 
 target_link_libraries(GraphicsTesting glfw)
 target_link_libraries(GraphicsTesting glad)
@@ -17,3 +17,4 @@ set_property(
 
 # Copy the res folder to the build directory
 add_custom_command(TARGET GraphicsTesting PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/res $<TARGET_FILE_DIR:GraphicsTesting>/res)
+

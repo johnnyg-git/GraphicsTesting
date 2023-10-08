@@ -28,6 +28,8 @@ int main()
 
 	Transform monkeyTransform(glm::vec3(-3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
+	Camera camera(gameWindow, glm::vec3(0.0f, 0.0f, 15.0f), glm::vec3(0.0f, 180.0f, 0.0f), 45.0f, 500.0f / 500.0f, 0.1f, 100.0f);
+
 	while (!glfwWindowShouldClose(window))
 	{
 		gameWindow->ClearWindow();
@@ -40,8 +42,7 @@ int main()
 		defaultShader.Use();
 
 		defaultShader.SetMatrix4fv("model", glm::value_ptr(model));
-		defaultShader.SetMatrix4fv("view", glm::value_ptr(view));
-		defaultShader.SetMatrix4fv("projection", glm::value_ptr(projection));
+		camera.UpdateShader(&defaultShader, "view", "projection");
 
 		defaultShader.SetVec3("lightColor", 1.0f, 1.0f, 1.0f);
 		defaultShader.SetVec3("objectColor", 1.0f, 1.0f, 1.0f);

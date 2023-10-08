@@ -16,6 +16,9 @@ void WindowResizeCallback(GLFWwindow* window, int width, int height)
 	Window* wind = (Window*)glfwGetWindowUserPointer(window);
 	wind->m_width = width;
 	wind->m_height = height;
+
+	for(const auto& callback : wind->m_resizeCallbacks)
+		callback(window, width, height);
 }
 
 void KeyCallback(GLFWwindow* window, int key, int scanCode, int action, int mods)
@@ -92,6 +95,16 @@ Window::~Window()
 
 	// Terminate GLFW
 	glfwTerminate();
+}
+
+void Window::AddResizeCallback(ResizeCallback callback)
+{
+	m_resizeCallbacks.push_back(callback);
+}
+
+void Window::RemoveResizeCallback(ResizeCallback callback)
+{
+	m_resizeCallbacks.erase(std::remove(m_resizeCallbacks.begin(), m_resizeCallbacks.end(), callback), m_resizeCallbacks.end());
 }
 
 // Initializes the window
