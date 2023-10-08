@@ -12,20 +12,10 @@ int main()
 	GLFWwindow* window = gameWindow->GetWindow();
 
 	Shader defaultShader("res/default.vert", "res/default.frag");
-	Mesh mesh("res/teapot.obj");
-
-	glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	glm::mat4 monkeyPos = glm::translate(glm::mat4(1.0f), glm::vec3(-3.0f, 0.0f, 0.0f));
-	glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 3.0f, 10.0f),
-										 glm::vec3(0.0f, 0.0f, 0.0f),
-										 glm::vec3(0.0f, 1.0f, 0.0f));
-	glm::mat4 projection = glm::perspective(glm::radians(45.0f),
-															 500.0f / 500.0f,
-															 0.1f,
-															 100.0f);
+	Mesh teapot("res/teapot.obj");
+	Transform teapotTransform(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
 	Mesh monkey("res/monkey.obj");
-
 	Transform monkeyTransform(glm::vec3(-3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
 	Camera camera(gameWindow, glm::vec3(0.0f, 0.0f, 15.0f), glm::vec3(0.0f, 180.0f, 0.0f), 45.0f, 500.0f / 500.0f, 0.1f, 100.0f);
@@ -41,18 +31,19 @@ int main()
 
 		defaultShader.Use();
 
-		defaultShader.SetMatrix4fv("model", glm::value_ptr(model));
+		glm::mat4 teapotMatrix = teapotTransform.GetLocalToWorldMatrix();
+		defaultShader.SetMatrix4fv("model", glm::value_ptr(teapotMatrix));
 		camera.UpdateShader(&defaultShader, "view", "projection");
 
 		defaultShader.SetVec3("lightColor", 1.0f, 1.0f, 1.0f);
 		defaultShader.SetVec3("objectColor", 1.0f, 1.0f, 1.0f);
 		defaultShader.SetBool("useTexture", false);
 
-		mesh.Render(defaultShader);
+		teapot.Render(defaultShader);
 
 		monkeyTransform.Rotate(glm::vec3(0.0f, 10.0f * gameWindow->GetDeltaTime(), 0.0f));
-		glm::mat4 matrix = monkeyTransform.GetLocalToWorldMatrix();
-		defaultShader.SetMatrix4fv("model", glm::value_ptr(matrix));
+		glm::mat4 monkeyMatrix = monkeyTransform.GetLocalToWorldMatrix();
+		defaultShader.SetMatrix4fv("model", glm::value_ptr(monkeyMatrix));
 		defaultShader.SetVec3("objectColor", 0.0f, 0.0f, 1.0f);
 		monkey.Render(defaultShader);
 
