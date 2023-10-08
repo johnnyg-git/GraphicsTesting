@@ -30,6 +30,8 @@ private:
 	float m_mouseX, m_mouseY;
 	// Last time the window was updated
 	float m_lastTime;
+	// Whether the window is destroyed or not
+	bool m_destroyed;
 
 	// Pointer to the GLFWWindow instance
 	GLFWwindow* m_window;

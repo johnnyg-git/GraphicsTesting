@@ -74,12 +74,8 @@ Window::Window(const char* title, int width, int height)
 
 // Constructor with custom background color
 Window::Window(const char* title, int width, int height, glm::vec4 backgColor)
+	: backgroundColor(backgColor), m_title(title), m_width(width), m_height(height), m_destroyed(false)
 {
-	// Initialize variables
-	m_title = title;
-	m_width = width;
-	m_height = height;
-	backgroundColor = backgColor;
 	// Initialize window, terminate if failed
 	if (!Init()) {
 		glfwTerminate();
@@ -93,6 +89,8 @@ Window::~Window()
 	if (m_window != nullptr)
 		glfwDestroyWindow(m_window);
 
+	m_destroyed = true;
+
 	// Terminate GLFW
 	glfwTerminate();
 }
@@ -104,6 +102,7 @@ void Window::AddResizeCallback(ResizeCallback callback)
 
 void Window::RemoveResizeCallback(ResizeCallback callback)
 {
+	if(m_destroyed) return;
 	m_resizeCallbacks.erase(std::remove(m_resizeCallbacks.begin(), m_resizeCallbacks.end(), callback), m_resizeCallbacks.end());
 }
 
@@ -116,6 +115,7 @@ bool Window::Init()
 	glfwSetErrorCallback(WindowErrorCallback);
 	// Initialize GLFW, return false if failed
 	if (!glfwInit()) {
+		std::cout << "Error: \nFailed to initialize GLFW" << std::endl;
 		return false;
 	}
 
