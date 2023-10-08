@@ -1,21 +1,21 @@
 #version 330 core
-layout (location = 0) in vec3 aPos;
-layout (location = 1) in vec3 aColor;
-layout (location = 2) in vec3 aNormal;
+layout(location = 0) in vec3 inPosition;     // Vertex position
+layout(location = 1) in vec3 inNormal;       // Vertex normal
+layout(location = 2) in vec2 inTexCoords;    // Texture coordinates
 
-out vec3 color;
+out vec3 fragNormal;                         // Interpolated normal to fragment shader
+out vec2 fragTexCoords;                      // Interpolated texture coordinates
 
-out vec3 normal;
-out vec3 crntPos;
+uniform mat4 model;                          // Model matrix
+uniform mat4 view;                           // View matrix
+uniform mat4 projection;                     // Projection matrix
 
-uniform mat4 model;
-uniform mat4 viewProj;
+void main() {
+    mat4 modelView = view * model;
 
-void main()
-{
-    crntPos = vec3(model * vec4(aPos, 1.0));
+    gl_Position = projection * modelView * vec4(inPosition, 1.0);
 
-    gl_Position = viewProj * model * vec4(aPos, 1.0);
-    color = aColor;
-    normal = mat3(transpose(inverse(model))) * aNormal;
+    fragNormal = mat3(transpose(inverse(modelView))) * inNormal;
+
+    fragTexCoords = inTexCoords;
 }
