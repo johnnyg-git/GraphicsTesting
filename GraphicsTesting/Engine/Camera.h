@@ -1,9 +1,9 @@
 #pragma once
 #include <map>
 
-#include "Window.h"
+#include "../Renderer/Window.h"
 #include "Transform.h"
-#include "Shader.h"
+#include "../Renderer/Shader.h"
 
 static void CameraResizeCallback(GLFWwindow* window, int width, int height);
 
